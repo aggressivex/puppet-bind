@@ -8,7 +8,8 @@ define bind::setup (
   $boot      = true,
   $status    = 'running',
   $rdncGen   = true,
-  $firewall  = false
+  $firewall  = false,
+  $port      = 53
 ) {
 
   include conf
@@ -58,18 +59,18 @@ define bind::setup (
   case $firewall {
     csf: {
       csf::port::open {'bind-firewall-csf-open': 
-        port => 53
+        port => $port
       }
     }
     iptables: {
       exec { "bind-firewall-iptables-add":
-        command => "iptables -A INPUT -p udp --dport 53 -j ACCEPT",
-        path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
+        command => "iptables -A INPUT -p udp --dport ${port} -j ACCEPT",
+        path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin:/sbin/",
         require => Package["bind"]
       }
       exec { "bind-firewall-iptables-save":
         command => "service iptables save",
-        path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
+        path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin:/sbin/",
         require => Exec["bind-firewall-iptables-add"]
       }
     }
