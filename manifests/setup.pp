@@ -64,7 +64,7 @@ define bind::setup (
     }
     iptables: {
       exec { "bind-firewall-iptables-add":
-        command => "iptables -A INPUT -p udp --dport ${port} -j ACCEPT",
+        command => "iptables -I INPUT 5 -p udp --dport ${port} -j ACCEPT",
         path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin:/sbin/",
         require => Package["bind"]
       }

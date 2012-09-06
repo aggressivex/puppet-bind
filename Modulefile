@@ -1,0 +1,8 @@
+name    'aggressivex-bind'
+version '0.5.0'
+author  'Luis M. Hdez'
+license 'MIT'
+project_page 'http://opensource.aggressivex.com/puppet/bind'
+source  'https://github.com/aggressivex/puppet-bind'
+summary 'Puppet module for bind'
+description 'This module installs and manages bind.'
