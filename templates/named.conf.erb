@@ -1,0 +1,46 @@
+<%
+def recursive_merge(a, h)
+  return a.merge!(h) {|key, _old, _new| if _old.class == Hash then recursive_merge(_old, _new) else _new end}
+end
+
+def prepare_value(value)
+  return value
+end
+
+def identation(deep)
+  if deep > 0
+    return "    " * deep
+  else
+    return ""
+  end
+end
+
+def recursive_put(data, deep=0, increment=0)
+
+  file = ''
+  deep += increment;
+
+  data.sort.each do |key, value|
+
+    if value.is_a? String        
+      file << identation(deep) + key  + ' ' + value + ";\n"
+    end
+
+    if value.is_a? Hash
+      file << identation(deep) + key + " {\n"
+      file << recursive_put(value, deep, 1)
+      file << identation(deep) + "};\n"
+    end
+  end
+  return file
+
+end
+
+finalConf = recursive_merge(defaultConf, customConf)
+
+%>#
+# This file has been generated automatically by Aggressivex/puppet-bind 
+# Issue [No logical order] As ruby doesn't keep the order in hashes, to avoid 
+# randomness, hash data is sorted until ruby 1.9.3
+#
+<%= recursive_put(finalConf) %>
