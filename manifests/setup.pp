@@ -3,20 +3,18 @@
 # This class installs bind for CentOS / RHEL
 #
 define bind::setup (
-  $ensure    = installed,
-  $bindSetup = {},
-  $boot      = true,
-  $status    = 'running',
-  $rdncGen   = true,
-  $firewall  = false,
-  $port      = 53
+  $cutomSetup = {},
+  $cutomConf  = {},
+  $ensure     = installed,
+  $boot       = true,
+  $status     = 'running',
+  $firewall   = false,
+  $rdncGen    = true,
 ) {
 
   include conf
-
-  $conf_bind_override = $bindSetup
-  $conf_bind_default = $conf::default
-  $conf_setup = $conf::setup
+  $defaultConf = $conf::conf
+  $defaultSetup = $conf::setup
 
   package { bind:
     ensure => $ensure,
@@ -29,22 +27,24 @@ define bind::setup (
     require => Package['bind']
   }
 
-  exec { "bind-rdnc-confgen":
-    command => "rndc-confgen -a -r /var/log/anaconda.syslog",
-    path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
-    require => Package['bind']
-  }
+  if $rdncGen == true {
+    exec { "bind-rdnc-confgen":
+      command => "rndc-confgen -a -r /var/log/anaconda.syslog",
+      path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
+      require => Package['bind']
+    }
 
-  exec { "bind-rdnc-chmod":
-    command => "chmod 666 /etc/rndc.key",
-    path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
-    require => Exec["bind-rdnc-confgen"]
-  }
+    exec { "bind-rdnc-chmod":
+      command => "chmod 666 /etc/rndc.key",
+      path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
+      require => Exec["bind-rdnc-confgen"]
+    }
 
-  exec { "bind-rdnc-chown":
-    command => "chown named /etc/rndc.key",
-    path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
-    require => Exec["bind-rdnc-chmod"]
+    exec { "bind-rdnc-chown":
+      command => "chown named /etc/rndc.key",
+      path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin",
+      require => Exec["bind-rdnc-chmod"]
+    }
   }
 
   service { 'named':
