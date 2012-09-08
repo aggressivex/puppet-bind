@@ -15,7 +15,7 @@ class conf {
       'statistics-file'        =>  "/var/named/data/named_stats.txt",
       'memstatistics-file'     =>  "/var/named/data/named_mem_stats.txt",
       'directory'              =>  "/var/named",
-      'allow-query'            =>  {'localhost' => ''},
+      'allow-query'            =>  {'any' => ''},
       'recursion'              => 'yes',
       'dnssec-enable'          => 'yes',
       'dnssec-validation'      => 'yes',
