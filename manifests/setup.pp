@@ -59,7 +59,7 @@ define bind::setup (
   case $firewall {
     csf: {
       csf::port::open {'bind-firewall-csf-open': 
-        port => $port
+        port => $defaultSetup['port']
       }
     }
     iptables: {
