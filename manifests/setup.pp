@@ -3,8 +3,8 @@
 # This class installs bind for CentOS / RHEL
 #
 define bind::setup (
-  $cutomSetup = {},
-  $cutomConf  = {},
+  $customSetup = {},
+  $customConf  = {},
   $ensure     = installed,
   $boot       = true,
   $status     = 'running',
@@ -61,7 +61,7 @@ define bind::setup (
     owner   => root,
     group   => named,
     mode    => 644,
-    content => template($defaultSetup['template-custom-zones']),
+    content => '',
     require => Package['bind'],
     notify  => Service['named'],
   }
