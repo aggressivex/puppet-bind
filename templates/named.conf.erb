@@ -5,6 +5,11 @@ def recursive_merge(a, h)
 end
 
 def prepare_value(value)
+
+  if value =~ /\//
+    return '"'+ value + '"'
+  end
+
   return value
 end
 
@@ -26,7 +31,7 @@ def recursive_put(data, deep=0, increment=0)
   data.each do |key, value|
 
     if value.is_a? String        
-      file << identation(deep) + key  + ' ' + value + ";\n"
+      file << identation(deep) + key  + ' ' + prepare_value(value) + ";\n"
     end
 
     if value.is_a? Hash
@@ -37,7 +42,7 @@ def recursive_put(data, deep=0, increment=0)
 
     if value.is_a? Array      
       value.each { |x| 
-        file << identation(deep) + key  + ' ' + x + ";\n"
+        file << identation(deep) + key  + ' ' + prepare_value(x) + ";\n"
       }
     end 
 
