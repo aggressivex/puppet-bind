@@ -56,6 +56,26 @@ define bind::setup (
     require    => Exec ['bind-rdnc-chown']
   }
 
+  file { "named-conf-zones":
+    path    => "/etc/named.custom.zones",
+    owner   => root,
+    group   => named,
+    mode    => 644,
+    content => template($defaultSetup['template-custom-zones']),
+    require => Package['bind'],
+    notify  => Service['named'],
+  }
+
+  file { "named-conf-file":
+    path    => "/etc/named.conf",
+    owner   => root,
+    group   => named,
+    mode    => 644,
+    content => template($defaultSetup['template-named-conf']),
+    require => Package['bind'],
+    notify  => Service['named'],
+  }
+
   case $firewall {
     csf: {
       csf::port::open {'bind-firewall-csf-open': 

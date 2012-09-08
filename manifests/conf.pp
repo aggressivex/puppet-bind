@@ -3,7 +3,9 @@
 #
 class conf {
   $setup = {
-    'port' => 53
+    'template-named-conf'   =>  "/bind/named.conf.erb",
+    'template-custom-zones' => "/bind/custom.zones.erb",
+    'port'                  => 53
   }
   $conf = {
     'options' => {
