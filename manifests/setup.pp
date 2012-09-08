@@ -3,13 +3,14 @@
 # This class installs bind for CentOS / RHEL
 #
 define bind::setup (
-  $customSetup = {},
-  $customConf  = {},
-  $ensure     = installed,
-  $boot       = true,
-  $status     = 'running',
-  $firewall   = false,
-  $rdncGen    = true,
+  $customSetup  = {},
+  $customConf   = {},
+  $ensure       = installed,
+  $boot         = true,
+  $status       = 'running',
+  $firewall     = false,
+  $firewallPort = 53,
+  $rdncGen      = true
 ) {
 
   include conf
@@ -84,7 +85,7 @@ define bind::setup (
     }
     iptables: {
       exec { "bind-firewall-iptables-add":
-        command => "iptables -I INPUT 5 -p udp --dport ${port} -j ACCEPT",
+        command => "iptables -I INPUT 5 -p udp --dport $firewallPort -j ACCEPT",
         path    => "/usr/local/bin/:/bin/:/usr/bin/:/usr/sbin:/sbin/",
         require => Package["bind"]
       }
