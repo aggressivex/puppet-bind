@@ -3,9 +3,9 @@
 #
 class conf {
   $setup = {
-    'template-named-conf'   =>  "/bind/named.conf.erb",
-    'template-custom-zones' => "/bind/custom.zones.erb",
-    'port'                  => 53
+    'template-named-conf'  => "/bind/named.conf.erb",
+    'template-named-zones' => "/bind/named.zones.erb",
+    'port'                 => 53
   }
   $conf = {
     'options' => {
@@ -29,5 +29,9 @@ class conf {
       '/etc/named.custom.zones',
       '/etc/named.root.key'
     ] 
+  }
+  $confRecordsSetups = {
+    'default' => [{}],
+    'gmail' => [{}],
   }
 }
